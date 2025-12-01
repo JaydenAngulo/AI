@@ -47,3 +47,15 @@ def run_chatbot():
         print()
 
 run_chatbot()
+
+import gradio as gr
+
+ui = gr.Interface(
+    fn=chat_ai,
+    inputs=gr.Textbook(label="Ask your question"),
+    outputs=gr.Textbook(label="AI Response"),
+    title="Finance Advisor AI",
+    description="Ask anything about money, budgeting, scams, or hidden fees."
+)
+
+ui.launch()
