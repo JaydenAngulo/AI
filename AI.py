@@ -1,5 +1,17 @@
 import os
 from openai import OpenAI
+import json
+
+with open("fees.json") as f:
+    fees_data = json.load(f)
+
+def detect_hidden_fees(text):
+    flagged = [fee for fee in fees_data["fees"] if fee.lower() in text.lower()]
+    if flagged:
+        return f"Hidden fees detected: {', '.join(flagged)}"
+    return "No obvious hidden fees detected."
+
+detect_hidden_fees("text")
 
 api_key = os.getenv("OPENAI_API_KEY")
 
@@ -9,9 +21,10 @@ if not api_key:
 client = OpenAI(api_key=api_key)
 
 System_prompt = """
-You are Jayden, a friendly, helpful financial advisor chatbot.
+You are Jayden, a friendly, helpful, professional financial advisor chatbot.
 You give clear, safe, general financial guidance.
-Your task is to detect hidden fees, tricky clauses, and potential financial risks.
+Your task is to detect hidden fees, analyze contracts, explain tricky clauses, and find potential financial risks.
+If you find any suspicious fees or clauses, explain why they may cost the user extra money and suggest safer alternatives.
 
 Rules:
 - Do NOT give legal instructions, tax forms, or personalized investment orders.
