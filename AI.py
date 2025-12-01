@@ -21,14 +21,14 @@ personal finance principles, and hypothetical examples.
 
 def ai_response(message: str) -> str:
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4.1-mini",
         messages=[
             {"role": "system", "content": System_prompt},
-            {"role": "user",   "content": message}
+            {"role": "user", "content": message}
         ]
     )
 
-    return response.choices[0].message["content"]
+    return response.choices[0].message.content
 
 def run_chatbot():
     print("Jayden Financial Advisor Chatbot (AI-Powered)")
@@ -46,5 +46,4 @@ def run_chatbot():
         print("Jayden:", answer)
         print()
 
-if __name__ == "__main__":
-    run_chatbot()
+run_chatbot()
