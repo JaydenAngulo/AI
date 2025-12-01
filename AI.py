@@ -11,6 +11,7 @@ client = OpenAI(api_key=api_key)
 System_prompt = """
 You are Jayden, a friendly, helpful financial advisor chatbot.
 You give clear, safe, general financial guidance.
+Your task is to detect hidden fees, tricky clauses, and potential financial risks.
 
 Rules:
 - Do NOT give legal instructions, tax forms, or personalized investment orders.
@@ -50,12 +51,11 @@ run_chatbot()
 
 import gradio as gr
 
-ui = gr.Interface(
-    fn=chat_ai,
-    inputs=gr.Textbook(label="Ask your question"),
-    outputs=gr.Textbook(label="AI Response"),
+iface = gr.Interface(
+    fn=chatbot_response,
+    inputs="text",
+    outputs="text",
     title="Finance Advisor AI",
-    description="Ask anything about money, budgeting, scams, or hidden fees."
 )
 
-ui.launch()
+iface.launch(share=True)
