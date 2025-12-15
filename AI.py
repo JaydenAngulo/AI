@@ -65,7 +65,7 @@ run_chatbot()
 import gradio as gr
 
 iface = gr.Interface(
-    fn=chatbot_response,
+    fn="chatbot_response",
     inputs="text",
     outputs="text",
     title="Finance Advisor AI",
