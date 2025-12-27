@@ -1,5 +1,5 @@
 import os
-from openai import OpenAI
+import openai
 import json
 
 with open("fees.json") as f:
@@ -18,10 +18,10 @@ api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     raise ValueError
 
-client = OpenAI(api_key=api_key)
+client = openai(api_key=api_key)
 
 System_prompt = """
-You are Jayden, a friendly, helpful, professional financial advisor chatbot.
+You are Jayden, a friendly, helpful, professional financial advisor chatbot for teens and high school students.
 You give clear, safe, general financial guidance.
 Your task is to detect hidden fees, analyze contracts, explain tricky clauses, and find potential financial risks.
 If you find any suspicious fees or clauses, explain why they may cost the user extra money and suggest safer alternatives.
