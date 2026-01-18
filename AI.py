@@ -1,17 +1,20 @@
+from flask import Flask, request, jsonify, render_template
 from openai import OpenAI
 import os
 import json
 
-with open("fees.json") as f:
-    fees_data = json.load(f)
+app = Flask(__name__)
 
-def detect_hidden_fees(text):
-    flagged = [fee for fee in fees_data["fees"] if fee.lower() in text.lower()]
-    if flagged:
-        return f"Hidden fees detected: {', '.join(flagged)}"
-    return "No obvious hidden fees detected."
+# with open("fees.json") as f:
+#     fees_data = json.load(f)
 
-detect_hidden_fees("text")
+# def detect_hidden_fees(text):
+#     flagged = [fee for fee in fees_data["fees"] if fee.lower() in text.lower()]
+#     if flagged:
+#         return f"Hidden fees detected: {', '.join(flagged)}"
+#     return "No obvious hidden fees detected."
+
+# detect_hidden_fees("text")
 
 api_key = os.getenv("OPENAI_API_KEY")
 
@@ -42,33 +45,33 @@ def ai_response(message: str) -> str:
         ]
     )
 
-    return response.choices[0].message.content
+#     return response.choices[0].message.content
 
-def run_chatbot():
-    print("Jayden Financial Advisor Chatbot (AI-Powered)")
-    print("Ask about investing, saving, budgeting, retiring, etc.")
-    print("Type 'exit' to quit.\n")
+# def run_chatbot():
+#     return "Jayden Financial Advisor Chatbot (AI-Powered)\nAsk about investing, saving, budgeting, retiring, etc.\nType 'exit' to quit.\n"
 
-    while True:
-        user_input = input("You: ")
+# user_input = input("You: ")
 
-        if user_input.lower() in ["exit", "quit"]:
-            print("Jayden: Bye!")
-            break
+# def input(user_input):
+#     if user_input.lower() in ["exit", "quit"]:
+#         return "Jayden: Bye!"
 
-        answer = ai_response(user_input)
-        print("Jayden:", answer)
-        print()
+def chat_response(user_input):
+    answer = ai_response(user_input)
+    return f"Jayden: {answer}\n"
 
-run_chatbot()
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-import gradio as gr
+@app.route("/ask", methods=["POST"])
+def ask():
+    data = request.json
+    user_input = data.get("message")
+    response = chat_response(user_input)
+    return jsonify({"response": response})
 
-iface = gr.Interface(
-    fn="chatbot_response",
-    inputs="text",
-    outputs="text",
-    title="Finance Advisor AI",
-)
+if __name__ == "__main__":
+    app.run(debug=True)
 
-iface.launch(share=True)
+print("Debug: ", data)
